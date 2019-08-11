@@ -1,4 +1,4 @@
-#Prise Request
+#Price Request
 
 ###This bundle contain modules:
 
