@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Smile Catalog frontend routes
+ *
+ * @category  Smile
+ * @package   Smile\Catalog
+ * @author    Roman Koshyk <romadaaaa@gmail.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="catalog" frontName="catalog">
+            <module name="Smile_Catalog" before="Magento_Catalog"/>
+        </route>
+    </router>
+</config>
