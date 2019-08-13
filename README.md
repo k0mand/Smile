@@ -1,6 +1,6 @@
 # Price Request
 
-### This bundle contain modules:
+### This bundle contains modules:
 
 -Customer;
 
