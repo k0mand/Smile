@@ -46,17 +46,12 @@ class Save extends Action
     /**
      * Sender email config path
      */
-    const XML_PATH_EMAIL_SENDER = 'customer_request_price/email/admin/email';
+    const EMAIL_SENDER = 'customer_request_price/email/admin/email';
 
     /**
      * Sender name config path
      */
-    const XML_PATH_NAME_SENDER = 'customer_request_price/email/admin/name';
-
-    /**
-     * Email template config path
-     */
-    const XML_PATH_EMAIL_TEMPLATE = 'customer_request_price/email/template';
+    const NAME_SENDER = 'customer_request_price/email/admin/name';
 
     /**
      * @var TransportBuilder
@@ -132,11 +127,15 @@ class Save extends Action
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
+
         $data = $this->getRequest()->getPostValue();
+
         if ($data) {    
             $postObject = new DataObject();
             $postObject->setData($data);
+
             $id = $this->getRequest()->getParam('id');
+
             try {
                 if (!$id) {
                     $model = $this->requestFactory->create();
@@ -144,10 +143,13 @@ class Save extends Action
                 } else {
                     $model = $this->requestRepository->getById($id);
                 }
+
                 $model->setData($data);
 
                 if (!empty($data['answer'])) {
+
                     $this->inlineTranslation->suspend();
+
                     $storeScope = ScopeInterface::SCOPE_STORE;
                     $transport = $this->transportBuilder
                         ->setTemplateIdentifier('request_admin_email_answer_template')
@@ -161,13 +163,17 @@ class Save extends Action
                         ->setFrom($this->getSenderData())
                         ->addTo($model->getEmail())
                         ->getTransport();
+
                     $transport->sendMessage();
+
                     $this->inlineTranslation->resume();
                     $model->setStatus(Request::STATUS_CLOSED);
                 }
+
                 $this->requestRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('Email has been sent.'));
                 $this->dataPersistor->clear('customer_request_price');
+
                 if ($this->getRequest()->getParam('back'))
                 {
                     return $resultRedirect->setPath('*/*/edit', ['id' => $model->getById()]);
@@ -178,12 +184,14 @@ class Save extends Action
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while answer the request.'));
             }
+
             $this->dataPersistor->set('customer_request_price', $data);
             return $resultRedirect->setPath(
                 '*/*/edit',
                 ['id' => $this->getRequest()->getParam('id')]
             );
         }
+
         return $resultRedirect->setPath('*/*/');
     }
 
@@ -195,8 +203,8 @@ class Save extends Action
     public function getSenderData()
     {
         return [
-            'name' => $this->scopeConfig->getValue(static::XML_PATH_NAME_SENDER),
-            'email' => $this->scopeConfig->getValue(static::XML_PATH_EMAIL_SENDER)
+            'name' => $this->scopeConfig->getValue(static::NAME_SENDER),
+            'email' => $this->scopeConfig->getValue(static::EMAIL_SENDER)
         ];
     }
 }

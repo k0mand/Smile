@@ -7,8 +7,6 @@
                     <name>komand</name>
                     <email>roman.koshyk20@gmail.com</email>
                 </admin>
-                <template>
-                </template>
             </email>
         </customer_request_price>
     </default>
