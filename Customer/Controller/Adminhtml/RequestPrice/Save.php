@@ -44,16 +44,6 @@ class Save extends Action
     private $dataPersistor;
 
     /**
-     * Sender email config path
-     */
-    const EMAIL_SENDER = 'customer_request_price/email/admin/email';
-
-    /**
-     * Sender name config path
-     */
-    const NAME_SENDER = 'customer_request_price/email/admin/name';
-
-    /**
      * @var TransportBuilder
      */
     private $transportBuilder;
@@ -203,8 +193,14 @@ class Save extends Action
     public function getSenderData()
     {
         return [
-            'name' => $this->scopeConfig->getValue(static::NAME_SENDER),
-            'email' => $this->scopeConfig->getValue(static::EMAIL_SENDER)
+            'name' => $this->scopeConfig->getValue(
+                'trans_email/ident_support/name',
+                ScopeInterface::SCOPE_STORE
+            ),
+            'email' => $this->scopeConfig->getValue(
+                'trans_email/ident_support/email',
+                ScopeInterface::SCOPE_STORE
+            )
         ];
     }
 }
