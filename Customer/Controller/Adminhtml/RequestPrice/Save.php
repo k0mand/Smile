@@ -135,6 +135,7 @@ class Save extends Action
                 }
 
                 $model->setData($data);
+                $message = 'Saving the successful.';
 
                 if (!empty($data['answer'])) {
 
@@ -156,12 +157,13 @@ class Save extends Action
 
                     $transport->sendMessage();
 
+                    $message = 'Email has been sent.';
                     $this->inlineTranslation->resume();
                     $model->setStatus(Request::STATUS_CLOSED);
                 }
 
                 $this->requestRepository->save($model);
-                $this->messageManager->addSuccessMessage(__('Email has been sent.'));
+                $this->messageManager->addSuccessMessage(__($message));
                 $this->dataPersistor->clear('customer_request_price');
 
                 if ($this->getRequest()->getParam('back'))
