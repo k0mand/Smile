@@ -127,26 +127,22 @@ class Save extends Action
             $id = $this->getRequest()->getParam('id');
 
             try {
-                if (!$id) {
-                    $model = $this->requestFactory->create();
-                    $data['id']= null;
-                } else {
+                if ($id) {
                     $model = $this->requestRepository->getById($id);
                 }
 
                 $model->setData($data);
-                $message = 'Saving the successful.';
+                $message = __('Saving the successful.');
 
                 if (!empty($data['answer'])) {
 
                     $this->inlineTranslation->suspend();
 
-                    $storeScope = ScopeInterface::SCOPE_STORE;
                     $transport = $this->transportBuilder
                         ->setTemplateIdentifier('request_admin_email_answer_template')
                         ->setTemplateOptions(
                             [
-                                'area' => FrontNameResolver::AREA_CODE,
+                                'area' => 'frontend',
                                 'store' => Store::DEFAULT_STORE_ID,
                             ]
                         )
@@ -157,20 +153,20 @@ class Save extends Action
 
                     $transport->sendMessage();
 
-                    $message = 'Email has been sent.';
                     $this->inlineTranslation->resume();
                     $model->setStatus(Request::STATUS_CLOSED);
+                    $message = __('Email has been sent.');
                 }
 
                 $this->requestRepository->save($model);
-                $this->messageManager->addSuccessMessage(__($message));
+                $this->messageManager->addSuccessMessage($message);
                 $this->dataPersistor->clear('customer_request_price');
 
-                if ($this->getRequest()->getParam('back'))
-                {
-                    return $resultRedirect->setPath('*/*/edit', ['id' => $model->getById()]);
+                $resultRedirect->setPath('*/*/');
+                if ($this->getRequest()->getParam('back')) {
+                    $resultRedirect->setPath('*/*/edit', ['id' => $model->getId()]);
                 }
-                return $resultRedirect->setPath('*/*/');
+                return $resultRedirect;
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
