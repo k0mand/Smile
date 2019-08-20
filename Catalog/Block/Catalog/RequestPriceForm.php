@@ -56,6 +56,6 @@ class RequestPriceForm extends Template
      */
     public function getCurrentProduct()
     {
-        return $this->_registry->registry('current_product');
+        return $this->_registry->registry('product');
     }
 }
