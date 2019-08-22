@@ -18,11 +18,11 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Store\Model\Store;
 use Smile\Customer\Api\RequestRepositoryInterface;
 use Smile\Customer\Model\RequestFactory;
 use Smile\Customer\Model\Request;
+use Magento\Framework\App\Area;
 
 /**
  * Class Save
@@ -142,7 +142,7 @@ class Save extends Action
                         ->setTemplateIdentifier('request_admin_email_answer_template')
                         ->setTemplateOptions(
                             [
-                                'area' => 'frontend',
+                                'area' => Area::AREA_FRONTEND,
                                 'store' => Store::DEFAULT_STORE_ID,
                             ]
                         )
